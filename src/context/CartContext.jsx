@@ -5,16 +5,35 @@ export const CartContext = createContext();
 const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
+  /* item amount state */
+
+  const [itemAmount, setItemAmount] = useState(0);
+  const [total, setTotal] = useState(0);
+
+  useEffect(()=>{
+    const total =cart.reduce((accumulator, currentItem)=>{
+      return accumulator + currentItem.price * currentItem.amount
+    },0)
+   setTotal(total) 
+  })
+
+useEffect(()=>{
+  if(cart){
+const amount = cart.reduce((accumulator, currentItem)=>{
+  return accumulator + currentItem.amount
+}, 0)
+setItemAmount(amount)
+  }
+},[cart])
+
   const addToCart = (product, id) => {
     const newItem = { ...product, amount: 1 };
 
-    const cartItem = cart.find((item) => {
-      return item.id === id;
-    });
+    const cartItem = cart.find((item) => item.id === id);
     if (cartItem) {
-      const newCart = [...cart].map((item) => {
+      const newCart = cart.map((item) => {
         if (item.id === id) {
-          return { ...item, amount: cart.amount + 1 };
+          return { ...item, amount: item.amount + 1 }; // Burada düzeltme yapıldı
         } else {
           return item;
         }
@@ -36,16 +55,46 @@ const CartProvider = ({ children }) => {
     setCart([]);
   };
 
+  const increaseAmount = (id) => {
+    const item = cart.find((item) => item.id === id);
+    if (item) {
+      addToCart(item, id);
+    }
+  };
   
-const increaseAmount = (id) => {
-  
- 
-};
 
+  const decreaseAmount = (id) => {
+    const cartItem = cart.find((item) => item.id === id); 
+    if (cartItem) {
+      if (cartItem.amount < 2) { 
+        removeFromCart(id);
+      } else { 
+        const newCart = cart.map((item) => {
+          if (item.id === id) {
+            return { ...item, amount: item.amount - 1 }; 
+          } else {
+            return item; 
+          }
+        });
+        setCart(newCart); 
+      }
+    }
+  };
+  
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, clearCart, increaseAmount }}
+      value={{
+        cart,
+        addToCart,
+        removeFromCart,
+        clearCart,
+        increaseAmount,
+        decreaseAmount,
+        itemAmount,
+        total,
+       
+      }}
     >
       {children}
     </CartContext.Provider>

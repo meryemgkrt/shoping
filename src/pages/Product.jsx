@@ -8,7 +8,7 @@ const Product = ({ product }) => {
 
   const { id, title, price, category, description, image } = product;
   return (
-    <div>
+    <div className="">
       <div className="border border-[#e4e4e4] h-[300px] mb-4 relative overflow-hidden group transition">
         <div className="w-full h-full flex justify-center items-center">
           {/* image */}

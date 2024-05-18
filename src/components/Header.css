@@ -1,0 +1,18 @@
+@media (min-width: 1024px) {
+    .justify-self-end {
+      margin-left: auto; /* Diğer içeriklerden sağa itmek için sol tarafına otomatik boşluk ekler */
+      margin-right: 0; /* Sağ kenar boşluğunu sıfırla */
+    }
+  }
+  
+  
+  .container > div:first-child {
+    margin-right: auto; /* Sağdaki öğeleri itmek için */
+  }
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
